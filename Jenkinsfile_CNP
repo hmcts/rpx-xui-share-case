@@ -1,0 +1,6 @@
+#!groovy
+
+@Library("Infrastructure")
+
+def type      = "nodejs"
+def product   = "xui"
