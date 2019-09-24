@@ -1,0 +1,18 @@
+{
+  "name": "xui-share-case",
+  "version": "0.0.1",
+  "description": "Share case service",
+  "main": "index.js",
+  "repository": "git@github.com:hmcts/rpx-xui-share-case.git",
+  "author": "Borislav Petrov <Borislav.Petrov@HMCTS.NET>",
+  "license": "MIT",
+
+  "scripts": {
+    "start": "node server.js"
+  },
+
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+
+}
