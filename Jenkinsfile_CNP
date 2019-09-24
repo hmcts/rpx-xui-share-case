@@ -1,6 +1,28 @@
 #!groovy
 
+properties([
+    [
+        $class       : 'GithubProjectProperty',
+        displayName  : 'Share Case Microservice',
+        projectUrlStr: 'https://github.com/hmcts/rpx-xui-share-case'
+    ],
+    pipelineTriggers([
+        [$class: 'GitHubPushTrigger']
+    ])
+])
+
 @Library("Infrastructure")
 
 def type      = "nodejs"
 def product   = "xui"
+
+withPipeline(type, product, component) {
+
+    enableDockerBuild()
+
+    after('checkout') {sh 'yarn cache clean'}
+
+    after('build') {
+        sh 'yarn start'
+    }
+}
