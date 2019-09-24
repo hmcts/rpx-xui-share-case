@@ -15,12 +15,15 @@ properties([
 
 def type      = "nodejs"
 def product   = "xui"
+def component = "share-case"
 
-withPipeline(type, product, component) {
+withPipeline("nodejs", product, component) {
 
     enableDockerBuild()
 
-    after('checkout') {sh 'yarn cache clean'}
+    after('checkout') {
+        sh 'yarn cache clean'
+    }
 
     after('build') {
         sh 'yarn start'
