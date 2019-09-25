@@ -21,11 +21,4 @@ withPipeline("nodejs", product, component) {
 
     enableDockerBuild()
 
-    after('checkout') {
-        sh 'yarn cache clean'
-    }
-
-    after('build') {
-        sh 'yarn start'
-    }
 }
