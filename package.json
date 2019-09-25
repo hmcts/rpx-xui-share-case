@@ -12,12 +12,13 @@
     "lint": "eslint .",
     "test:coverage": "echo 'not implemented'",
     "test:a11y": "echo 'not implemented'",
-    "sonar-scan": "echo 'not implemented'"
+    "sonar-scan": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "dependencies": {
     "eslint": "^6.4.0",
     "express": "^4.17.1",
     "mocha": "^6.2.0",
+    "sonar-scanner": "^3.1.0",
     "supertest": "^4.0.2"
   }
 }

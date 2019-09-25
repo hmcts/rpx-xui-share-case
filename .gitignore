@@ -61,3 +61,15 @@ typings/
 .next
 
 .idea/
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+/reports
+api/.nyc_output
