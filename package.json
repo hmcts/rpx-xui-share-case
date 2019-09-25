@@ -11,7 +11,8 @@
     "test": "NODE_PATH=. LOG_LEVEL=OFF mocha",
     "lint": "eslint .",
     "test:coverage": "echo 'not implemented'",
-    "test:a11y": "echo 'not implemented'"
+    "test:a11y": "echo 'not implemented'",
+    "sonar-scan": "echo 'not implemented'"
   },
   "dependencies": {
     "eslint": "^6.4.0",
