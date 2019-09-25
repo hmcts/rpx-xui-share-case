@@ -6,13 +6,13 @@
   "repository": "git@github.com:hmcts/rpx-xui-share-case.git",
   "author": "Borislav Petrov <Borislav.Petrov@HMCTS.NET>",
   "license": "MIT",
-
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "NODE_PATH=. LOG_LEVEL=OFF mocha"
   },
-
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mocha": "^6.2.0",
+    "supertest": "^4.0.2"
   }
-
 }
