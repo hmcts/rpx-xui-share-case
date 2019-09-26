@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const app = express();
 
 app.get('/', (req, res) => {
@@ -13,15 +14,41 @@ app.listen(PORT, () => {
 
 var ccdHeader;
 
-app.get('/test1', (req, res, next) => {
+app.post('/test1', (req, res, next) => {
     console.log(req.headers);
     ccdHeader = req.headers;
     res.send(ccdHeader);
 
 });
 
+const ccdGetUserToken = async (ccdPath) => {
+
+    const response = axios.get(ccdPath)
+        .then(function (response) {
+            // handle success
+            console.log(response);
+        })
+
+    return response;
+};
+
+
+
 app.get('/test2', (req, res, next) => {
     console.log(req.headers);
 
     res.send(ccdHeader);
 });
+
+app.get('/incomingToken', (req, res, next) => {
+
+    // Firstly get ServiceAuthorization
+    const authroization = req.headers.Authorization;
+    // const authroization = req.headers.ServiceAuthorization;
+    console.log(req.headers);
+
+    //
+
+});
+
+
