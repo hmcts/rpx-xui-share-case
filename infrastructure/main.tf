@@ -13,9 +13,9 @@ module "app" {
     ilbIp = "${var.ilbIp}"
     subscription = "${var.subscription}"
     capacity     = "${var.capacity}"
-    is_frontend = "${!(var.env == "preview" || var.env == "spreview") ? 1 : 0}"
+    is_frontend = "false"
     additional_host_name = "${var.additional_host_name}"
-    https_only="true"
+    https_only="false"
     common_tags  = "${var.common_tags}"
     asp_rg = "${local.app_full_name}-${var.env}"
     asp_name = "${var.shared_product_name}-${var.env}"
@@ -36,7 +36,7 @@ module "app" {
         # Need to check these vault values - dont seem right here.
         S2S_SECRET = "${data.azurerm_key_vault_secret.s2s_secret.value}"
         IDAM_SECRET = "${data.azurerm_key_vault_secret.oauth2_secret.value}"
-    
+
 
     }
 }
