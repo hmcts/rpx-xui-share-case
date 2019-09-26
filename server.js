@@ -11,8 +11,17 @@ app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`);
 });
 
+var ccdHeader;
 
 app.get('/test1', (req, res, next) => {
     console.log(req.headers);
-    res.json(['Test1','Test2','Test3','Test4','Test5']);
+    ccdHeader = req.headers;
+    res.send(ccdHeader);
+
+});
+
+app.get('/test2', (req, res, next) => {
+    console.log(req.headers);
+
+    res.send(ccdHeader);
 });
