@@ -13,14 +13,19 @@ app.listen(PORT, () => {
 });
 
 var ccdHeader;
+var authorizationToken;
+var s2sTokenCCD
 
 app.post('/test1', (req, res, next) => {
     console.log(req.headers);
-    ccdHeader = req.headers;
-    res.send(ccdHeader);
+    ccdHeader = req;
+    authorizationToken = req.headers.authorization;
+    s2sTokenCCD = req.headers.serviceauthorization;
+    res.sendStatus(200);
 
 });
 
+/*
 const ccdGetUserToken = async (ccdPath) => {
 
     const response = axios.get(ccdPath)
@@ -32,7 +37,7 @@ const ccdGetUserToken = async (ccdPath) => {
     return response;
 };
 
-
+*/
 
 app.get('/test2', (req, res, next) => {
     console.log(req.headers);
@@ -40,6 +45,7 @@ app.get('/test2', (req, res, next) => {
     res.send(ccdHeader);
 });
 
+/*
 app.get('/incomingToken', (req, res, next) => {
 
     // Firstly get ServiceAuthorization
@@ -50,5 +56,5 @@ app.get('/incomingToken', (req, res, next) => {
     //
 
 });
-
+*/
 
