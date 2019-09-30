@@ -18,6 +18,7 @@ var ccdHeader;
 var authorizationToken;
 var s2sTokenCCD;
 var ccdBody;
+var mockedResponse;
 
 app.post('/test1', (req, res, next) => {
     console.log(req);
@@ -26,7 +27,37 @@ app.post('/test1', (req, res, next) => {
     ccdBody = req.body;
     authorizationToken = req.headers.authorization;
     s2sTokenCCD = req.headers.serviceauthorization;
-    res.send(ccdHeader);
+
+    mockedResponse = {
+          "data": {
+            "PersonFirstName": "tes",
+            "dynamicList": {
+              "value": {
+                 "code": "List1",
+                 "label": " List 1"
+                },
+                "list_items": [{
+                     "code": "List1",
+                     "label": " List 1"
+                     },
+                    {
+                         "code": "List2",
+                         "label": " List 2"
+                        },
+                    {
+                        "code": "List3",
+                       "label": " List 3"
+                    },
+                     {
+                        "code": "List4",
+                        "label": " List 4"
+                    }
+              ]
+            }
+              }
+            };
+    res.set('Content-Type', 'application/json')
+    res.send(mockedResponse);
 
 });
 
