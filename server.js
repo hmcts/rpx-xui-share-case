@@ -102,16 +102,19 @@ app.get('/incomingToken', (req, res, next) => {
 // s2s token generation
 const s2sSecretunTrimmed = process.env.S2S_SECRET;
 const s2sSecret = s2sSecretunTrimmed.trim();
-async function postS2SLease() {
-    const oneTimePassword = otp({secret: s2sSecret}).totp();
+const oneTimePassword = otp({secret: s2sSecret}).totp();
+
+console.log(oneTimePassword);
+function postS2SLease() {
+
     let response;
     var microservice = 'xui_webapp';
 
-    response = await axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
+    response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
         microservice,
         oneTimePassword,
     });
-    return response.data
+    return response.data;
 }
 
 
