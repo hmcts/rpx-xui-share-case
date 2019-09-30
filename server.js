@@ -105,9 +105,11 @@ const s2sSecret = s2sSecretunTrimmed.trim();
 const oneTimePassword = otp({secret: s2sSecret}).totp();
 let tokenresponse;
 let tokenerror;
+let serviceToken;
+
+
 
 function postS2SLease() {
-
     let response;
     var microservice = 'xui_webapp';
 /*
@@ -121,31 +123,21 @@ function postS2SLease() {
         oneTimePassword,
     })
         .then(function (response) {
-            tokenresponse = response;
-            return response;
+            serviceToken = response.data;
+            console.log(serviceToken);
         })
         .catch(function (error) {
-            tokenerror = error;
+            console.log(error);
         });
-    return response;
+    return serviceToken;
 }
 
-
-const token = postS2SLease();
-
 app.get('/test4', (req, res, next) => {
-    res.send(token);
+   postS2SLease();
+    console.log('BORIS TOKEN: ', serviceToken);
+    res.send(serviceToken);
 });
 
-app.get('/test5', (req, res, next) => {
-    res.send(oneTimePassword);
-});
 
-app.get('/test6', (req,res, next) => {
-    res.send(tokenresponse);
-});
 
-app.get('/test7', (req, res, next) => {
-    res.send(tokenerror);
-});
 
