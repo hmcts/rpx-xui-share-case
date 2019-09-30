@@ -107,7 +107,7 @@ let tokenresponse;
 let tokenerror;
 let serviceToken;
 
-
+let serviceToken1;
 
 function postS2SLease() {
     let response;
@@ -118,16 +118,16 @@ function postS2SLease() {
         oneTimePassword,
     });
 */
-    response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
+    response = axios.post('http://localhost:1111', {
         microservice,
         oneTimePassword,
     })
         .then(function (response) {
-            serviceToken = response.data;
+            serviceToken1 = response.data;
             console.log(serviceToken);
         })
         .catch(function (error) {
-            console.log(error);
+            serviceToken = error;
         });
     return serviceToken;
 }
@@ -138,6 +138,8 @@ app.get('/test4', (req, res, next) => {
     res.send(serviceToken);
 });
 
-
-
+app.get('/test5', (req, res, next) => {
+    postS2SLease();
+    res.send(serviceToken1);
+});
 
