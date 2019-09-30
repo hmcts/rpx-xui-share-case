@@ -118,7 +118,7 @@ function postS2SLease() {
         oneTimePassword,
     });
 */
-    response = axios.post('http://localhost:1111', {
+    response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
         microservice,
         oneTimePassword,
     })
