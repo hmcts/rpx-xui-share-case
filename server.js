@@ -107,11 +107,11 @@ let tokenresponse;
 let tokenerror;
 let serviceToken;
 
-let serviceToken1;
+let serviceTokenError;
 
 function postS2SLease() {
     let response;
-    var microservice = 'xui_webapp';
+ //   var microservice = 'xui_webapp';
 /*
     response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
         microservice,
@@ -119,15 +119,15 @@ function postS2SLease() {
     });
 */
     response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
-        microservice,
-        oneTimePassword,
+        microservice: 'xui_webapp',
+        oneTimePassword: oneTimePassword
     })
         .then(function (response) {
-            serviceToken1 = response.data;
+            serviceToken = response.data;
             console.log(serviceToken);
         })
         .catch(function (error) {
-            serviceToken = error;
+            serviceTokenError = error;
         });
     return serviceToken;
 }
@@ -140,6 +140,6 @@ app.get('/test4', (req, res, next) => {
 
 app.get('/test5', (req, res, next) => {
     postS2SLease();
-    res.send(serviceToken1);
+    res.send(serviceTokenError);
 });
 
