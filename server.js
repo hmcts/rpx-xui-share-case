@@ -2,6 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 
+app.use(express.json());
+
 app.get('/', (req, res) => {
     res.send('App is running');
 });
@@ -18,7 +20,7 @@ var s2sTokenCCD
 
 app.post('/test1', (req, res, next) => {
     console.log(req.headers);
-    ccdHeader = req;
+    ccdHeader = req.headers;
     authorizationToken = req.headers.authorization;
     s2sTokenCCD = req.headers.serviceauthorization;
     res.sendStatus(200);
@@ -40,8 +42,7 @@ const ccdGetUserToken = async (ccdPath) => {
 */
 
 app.get('/test2', (req, res, next) => {
-    console.log(req.headers);
-
+console.log(ccdHeader);
     res.send(ccdHeader);
 });
 
