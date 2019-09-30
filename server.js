@@ -43,17 +43,17 @@ const ccdGetUserToken = async (ccdPath) => {
 };
 
 */
-var output1;
-var output2;
-var output3;
 
 app.get('/test2', (req, res, next) => {
 console.log(ccdHeader);
-  output1 = JSON.stringify(ccdHeader);
-  output2 = JSON.stringify(ccdBody);
-  output3 = output1 + output2;
-    res.send(output3);
+    res.send(ccdHeader);
 });
+
+app.get('/test3', (req, res, next) => {
+    console.log(ccdBody);
+    res.send(ccdBody);
+});
+
 
 /*
 app.get('/incomingToken', (req, res, next) => {
