@@ -29,34 +29,43 @@ app.post('/test1', (req, res, next) => {
     s2sTokenCCD = req.headers.serviceauthorization;
 
     mockedResponse = {
-            "OrgListOfUsers": {
-              "value": {
-                 "code": "List1",
-                 "label": " List 1"
-                },
-                "list_items": [{
-                     "code": "List1",
-                     "label": " List 1"
-                     },
-                    {
-                         "code": "List2",
-                         "label": " List 2"
+            "jsonBody": {
+                "data": {
+                    "OrgListOfUsers": {
+                        "default": {
+                            "code": "FixedList1",
+                            "label": "Fixed List 1"
                         },
-                    {
-                        "code": "List3",
-                       "label": " List 3"
-                    },
-                     {
-                        "code": "List4",
-                        "label": " List 4"
+                        "dynamic_list_items": [{
+                            "code": "FixedList1",
+                            "label": "Fixed List 1"
+                        }, {
+                            "code": "FixedList2",
+                            "label": "Fixed List 2"
+                        }, {
+                            "code": "FixedList3",
+                            "label": "Fixed List 3"
+                        }, {
+                            "code": "FixedList4",
+                            "label": "Fixed List 4"
+                        }, {
+                            "code": "FixedList5",
+                            "label": "Fixed List 5"
+                        }, {
+                            "code": "FixedList6",
+                            "label": "Fixed List 6"
+                        }, {
+                            "code": "FixedList7",
+                            "label": "Fixed List 7"
+                        }
+                        ]
                     }
-              ]
+                }
             }
 
-            };
+    };
     res.set('Content-Type', 'application/json')
     res.send(mockedResponse);
-
 });
 
 /*
