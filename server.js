@@ -29,9 +29,9 @@ app.post('/test1', (req, res, next) => {
     s2sTokenCCD = req.headers.serviceauthorization;
 
     mockedResponse = {
-        "jsonBody": {
+
             "data": {
-                "DynamicList": {
+                "OrgListOfUsers": {
                     "value": {
                         "code": "FixedList1",
                         "label": "Fixed List 1"
@@ -61,7 +61,7 @@ app.post('/test1', (req, res, next) => {
                     ]
                 }
             }
-        }
+
     };
     res.set('Content-Type', 'application/json')
     res.send(mockedResponse);
