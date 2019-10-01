@@ -29,7 +29,6 @@ app.post('/test1', (req, res, next) => {
     s2sTokenCCD = req.headers.serviceauthorization;
 
     mockedResponse = {
-                "data": {
                     "OrgListOfUsers": {
                         "default": {
                             "code": "FixedList1",
@@ -59,8 +58,6 @@ app.post('/test1', (req, res, next) => {
                         }
                         ]
                     }
-                }
-
     };
     res.set('Content-Type', 'application/json')
     res.send(mockedResponse);
