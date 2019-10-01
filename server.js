@@ -30,11 +30,11 @@ app.post('/test1', (req, res, next) => {
 
     mockedResponse = {
                     "OrgListOfUsers": {
-                        "default": {
+                        "value": {
                             "code": "FixedList1",
                             "label": "Fixed List 1"
                         },
-                        "dynamic_list_items": [{
+                        "list_items": [{
                             "code": "FixedList1",
                             "label": "Fixed List 1"
                         }, {
