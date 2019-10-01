@@ -22,42 +22,46 @@ var mockedResponse;
 
 app.post('/test1', (req, res, next) => {
     console.log(req);
-    console.log('REQUEST BODY: ',req.body);
+    console.log('REQUEST BODY: ', req.body);
     ccdHeader = req.headers;
     ccdBody = req.body;
     authorizationToken = req.headers.authorization;
     s2sTokenCCD = req.headers.serviceauthorization;
 
     mockedResponse = {
-                    "OrgListOfUsers": {
-                        "value": {
-                            "code": "FixedList1",
-                            "label": "Fixed List 1"
-                        },
-                        "list_items": [{
-                            "code": "FixedList1",
-                            "label": "Fixed List 1"
-                        }, {
-                            "code": "FixedList2",
-                            "label": "Fixed List 2"
-                        }, {
-                            "code": "FixedList3",
-                            "label": "Fixed List 3"
-                        }, {
-                            "code": "FixedList4",
-                            "label": "Fixed List 4"
-                        }, {
-                            "code": "FixedList5",
-                            "label": "Fixed List 5"
-                        }, {
-                            "code": "FixedList6",
-                            "label": "Fixed List 6"
-                        }, {
-                            "code": "FixedList7",
-                            "label": "Fixed List 7"
-                        }
-                        ]
+        "jsonBody": {
+            "data": {
+                "DynamicList": {
+                    "value": {
+                        "code": "FixedList1",
+                        "label": "Fixed List 1"
+                    },
+                    "list_items": [{
+                        "code": "FixedList1",
+                        "label": "Fixed List 1"
+                    }, {
+                        "code": "FixedList2",
+                        "label": "Fixed List 2"
+                    }, {
+                        "code": "FixedList3",
+                        "label": "Fixed List 3"
+                    }, {
+                        "code": "FixedList4",
+                        "label": "Fixed List 4"
+                    }, {
+                        "code": "FixedList5",
+                        "label": "Fixed List 5"
+                    }, {
+                        "code": "FixedList6",
+                        "label": "Fixed List 6"
+                    }, {
+                        "code": "FixedList7",
+                        "label": "Fixed List 7"
                     }
+                    ]
+                }
+            }
+        }
     };
     res.set('Content-Type', 'application/json')
     res.send(mockedResponse);
@@ -78,7 +82,7 @@ const ccdGetUserToken = async (ccdPath) => {
 */
 
 app.get('/test2', (req, res, next) => {
-console.log(ccdHeader);
+    console.log(ccdHeader);
     res.send(ccdHeader);
 });
 
@@ -114,7 +118,7 @@ function postS2SLease() {
     let response;
     const oneTimePassword = otp({secret: s2sSecret}).totp();
 
-response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
+    response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
         microservice: 'xui_webapp',
         oneTimePassword: oneTimePassword
     })
@@ -129,7 +133,7 @@ response = axios.post('http://rpe-service-auth-provider-demo.service.core-comput
 }
 
 app.get('/test4', (req, res, next) => {
-   postS2SLease();
+    postS2SLease();
     console.log('BORIS TOKEN: ', serviceToken);
     res.send(serviceToken);
 });
