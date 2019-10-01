@@ -46,26 +46,26 @@ app.post('/test1', (req, res, next) => {
             "D8DerivedRespondentCorrespondenceAddr":"22 wilberforce road\nadffadfdfas",
             "D8MarriagePetitionerName":"Juileta July",
                 "dynamicList": {
-                "value": {
+                "OrgListOfUsers": {
                     "code": "List1",
                         "label": " List 1"
-                },
-                "list_items": [{
-                    "code": "List1",
-                    "label": " List 1"
-                },
-                    {
-                        "code": "List2",
-                        "label": " List 2"
                     },
-                    {
-                        "code": "List3",
-                        "label": " List 3"
-                    },
-                    {
-                        "code": "List4",
-                        "label": " List 4"
-                    }
+                    "list_items": [{
+                        "code": "List1",
+                        "label": " List 1"
+                        },
+                        {
+                            "code": "List2",
+                            "label": " List 2"
+                        },
+                        {
+                            "code": "List3",
+                            "label": " List 3"
+                        },
+                        {
+                            "code": "List4",
+                            "label": " List 4"
+                        }
                 ]
             },
             "D8DerivedPetitionerHomeAddress":"22 wilberforce road\nadffadfdfas",
