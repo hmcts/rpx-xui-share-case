@@ -50,6 +50,7 @@ var  rawresponseRD;
 var listItemsArrayToSend;
 var responseToSendOnFirstPost;
 var responseFromPRD;
+var responseFromPRDError;
 
 app.post('/test1', (req, res, next) => {
     console.log(req);
@@ -62,8 +63,8 @@ app.post('/test1', (req, res, next) => {
 
     axios({
         method: 'get',
-        url: 'https://rd-professional-api-demo.service.core-compute-demo.internal/refdata/external/v1/organisations/users',
-        headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken }
+        url: 'http://rd-professional-api-demo.service.core-compute-demo.internal/refdata/external/v1/organisations/users',
+        headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken },
     })
         .then(function(response) {
           responseFromPRD = response;
@@ -119,7 +120,9 @@ app.post('/test1', (req, res, next) => {
 
             res.set('Content-Type', 'application/json');
             res.send(responseToSendOnFirstPost);
-        });
+        }) .catch(function (error) {
+        responseFromPRDError = error;
+    });
 
 
 
@@ -231,13 +234,21 @@ app.post('/test6', (req, res, next) => {
 });
 
 app.get('/test7', (req, res, next) => {
-    postS2SLease();
     res.send(selectedColeagueResponse);
 });
 
 app.get('/test8', (req, res, next) => {
-    postS2SLease();
     res.send(responseFromPRD);
 });
 
+app.get('/test9', (req, res, next) => {
+    res.send(responseFromPRDError);
+});
 
+p.get('/test10', (req, res, next) => {
+    res.send(serviceToken);
+});
+
+p.get('/test11', (req, res, next) => {
+    res.send(authorizationToken);
+});
