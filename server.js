@@ -245,10 +245,10 @@ app.get('/test9', (req, res, next) => {
     res.send(responseFromPRDError);
 });
 
-p.get('/test10', (req, res, next) => {
+app.get('/test10', (req, res, next) => {
     res.send(serviceToken);
 });
 
-p.get('/test11', (req, res, next) => {
+app.get('/test11', (req, res, next) => {
     res.send(authorizationToken);
 });
