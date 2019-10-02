@@ -62,7 +62,7 @@ app.post('/test1', (req, res, next) => {
     axios({
         method: 'get',
         url: 'https://rd-professional-api-demo.service.core-compute-demo.internal/refdata/external/v1/organisations/users',
-        headers: {'ServiceAuthorization': 'serviceToken', 'Authorization': authorizationToken }
+        headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken }
     })
         .then(function(response) {
 
