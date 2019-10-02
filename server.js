@@ -49,6 +49,7 @@ var ccdResponsePost1;
 var  rawresponseRD;
 var listItemsArrayToSend;
 var responseToSendOnFirstPost;
+var responseFromPRD;
 
 app.post('/test1', (req, res, next) => {
     console.log(req);
@@ -65,8 +66,7 @@ app.post('/test1', (req, res, next) => {
         headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken }
     })
         .then(function(response) {
-
-
+          responseFromPRD = response;
           rawresponseRD = response.data.users;
 
             var idamStatus = "idamStatus";
@@ -233,6 +233,11 @@ app.post('/test6', (req, res, next) => {
 app.get('/test7', (req, res, next) => {
     postS2SLease();
     res.send(selectedColeagueResponse);
+});
+
+app.get('/test8', (req, res, next) => {
+    postS2SLease();
+    res.send(responseFromPRD);
 });
 
 
