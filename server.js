@@ -14,11 +14,41 @@ app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`);
 });
 
+// s2s token generation
+const s2sSecretunTrimmed = process.env.S2S_SECRET;
+const s2sSecret = s2sSecretunTrimmed.trim();
+let tokenresponse;
+let tokenerror;
+let serviceToken;
+
+let serviceTokenError;
+
+function postS2SLease() {
+    let response;
+    const oneTimePassword = otp({secret: s2sSecret}).totp();
+
+    response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
+        microservice: 'xui_webapp',
+        oneTimePassword: oneTimePassword
+    })
+        .then(function (response) {
+            serviceToken = response.data;
+            console.log(serviceToken);
+        })
+        .catch(function (error) {
+            serviceTokenError = error;
+        });
+    return serviceToken;
+}
+
 var ccdHeader;
 var authorizationToken;
 var s2sTokenCCD;
 var ccdBody;
-var mockedResponse;
+var ccdResponsePost1;
+var  rawresponseRD;
+var listItemsArrayToSend;
+var responseToSendOnFirstPost;
 
 app.post('/test1', (req, res, next) => {
     console.log(req);
@@ -28,7 +58,74 @@ app.post('/test1', (req, res, next) => {
     authorizationToken = req.headers.authorization;
     s2sTokenCCD = req.headers.serviceauthorization;
 
-    mockedResponse = {
+
+    axios({
+        method: 'get',
+        url: 'https://rd-professional-api-demo.service.core-compute-demo.internal/refdata/external/v1/organisations/users',
+        headers: {'ServiceAuthorization': 'serviceToken', 'Authorization': authorizationToken }
+    })
+        .then(function(response) {
+
+
+          rawresponseRD = response.data.users;
+
+            var idamStatus = "idamStatus";
+            // search for ACTIVE only
+            function searchActive(nameKey, myArray){
+              var  myUpdatedArray = [];
+                for (var i=0; i < myArray.length; i++) {
+                    if (myArray[i].idamStatus === nameKey) {
+                        myUpdatedArray.push(myArray[i]);
+                    }
+                }
+                return myUpdatedArray;
+            }
+
+            ccdResponsePost1 =  searchActive("ACTIVE", rawresponseRD);
+
+            // create an array with desired values
+            function createListItemsArray(myArray){
+                var  listItemsArray = [];
+                var userIdentifier = "userIdentifier";
+                var firstName = "firstName";
+                for (var i=0; i < myArray.length; i++) {
+
+                        listItemsArray.push(   {
+                            "code": myArray[i].userIdentifier,
+                            "label": myArray[i].firstName
+                        }    );
+
+                }
+                return listItemsArray;
+            }
+
+
+
+
+            listItemsArrayToSend = createListItemsArray(ccdResponsePost1);
+
+
+            responseToSendOnFirstPost = {
+
+                "data": {
+                    "OrgListOfUsers": {
+                        "value": listItemsArrayToSend[0],
+                        "list_items": listItemsArrayToSend
+                    }
+                }
+
+            };
+
+
+            res.set('Content-Type', 'application/json');
+            res.send(responseToSendOnFirstPost);
+        });
+
+
+
+
+/*
+    ccdResponsePost1 = {
 
             "data": {
                 "OrgListOfUsers": {
@@ -63,8 +160,9 @@ app.post('/test1', (req, res, next) => {
             }
 
     };
-    res.set('Content-Type', 'application/json')
-    res.send(mockedResponse);
+
+*/
+
 });
 
 /*
@@ -105,32 +203,7 @@ app.get('/incomingToken', (req, res, next) => {
 });
 */
 
-// s2s token generation
-const s2sSecretunTrimmed = process.env.S2S_SECRET;
-const s2sSecret = s2sSecretunTrimmed.trim();
-let tokenresponse;
-let tokenerror;
-let serviceToken;
 
-let serviceTokenError;
-
-function postS2SLease() {
-    let response;
-    const oneTimePassword = otp({secret: s2sSecret}).totp();
-
-    response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
-        microservice: 'xui_webapp',
-        oneTimePassword: oneTimePassword
-    })
-        .then(function (response) {
-            serviceToken = response.data;
-            console.log(serviceToken);
-        })
-        .catch(function (error) {
-            serviceTokenError = error;
-        });
-    return serviceToken;
-}
 
 app.get('/test4', (req, res, next) => {
     postS2SLease();
@@ -161,3 +234,5 @@ app.get('/test7', (req, res, next) => {
     postS2SLease();
     res.send(selectedColeagueResponse);
 });
+
+
