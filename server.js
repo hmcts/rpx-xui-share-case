@@ -143,3 +143,21 @@ app.get('/test5', (req, res, next) => {
     res.send(serviceTokenError);
 });
 
+let mockedResponse1;
+let selectedColeagueResponse;
+app.post('/test6', (req, res, next) => {
+    console.log(req);
+    console.log('REQUEST BODY: ', req.body);
+    selectedColeagueResponse = req.body;
+
+    mockedResponse1 = {
+
+    };
+    res.set('Content-Type', 'application/json')
+    res.send(mockedResponse1);
+});
+
+app.get('/test7', (req, res, next) => {
+    postS2SLease();
+    res.send(selectedColeagueResponse);
+});
