@@ -268,7 +268,9 @@ app.post('/test6', (req, res, next) => {
         method: 'post',
         url: urlTestVars,
         headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken },
-        data: { }
+        data: {
+            "id": idOfUserWhoIsGrantedAccess
+        }
     })
 
     res.send('');
