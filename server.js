@@ -269,7 +269,7 @@ app.post('/test6', (req, res, next) => {
     axios({
         method: 'post',
         url: urlTestVars,
-        headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken },
+        headers: {'ServiceAuthorization': s2sTokenCCD, 'Authorization': authorizationToken },
         data: {
             id : idOfUserWhoIsGrantedAccess
         }
