@@ -2,6 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const otp = require('otp');
+const jwtDecode = require('jwt-decode');
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -93,7 +95,7 @@ app.post('/test1', (req, res, next) => {
 
                         listItemsArray.push(   {
                             "code": myArray[i].userIdentifier,
-                            "label": myArray[i].firstName
+                            "label": myArray[i].firstName + ' ' + myArray[i].lastName
                         }    );
 
                 }
@@ -219,19 +221,62 @@ app.get('/test5', (req, res, next) => {
     res.send(serviceTokenError);
 });
 
-let mockedResponse1;
+
+// Callback to catch the selected user and pass it to ccd
+let idOfUserWhoGrantsAccess;
 let selectedColeagueResponse;
+let caseTypeId;
+let caseJurisdictionId;
+let caseIDCcd;
+let urlTestVars;
+let decodedToken;
+let decodedEmailToSearchFor;
+let idOfUserWhoIsGrantedAccess;
+
 app.post('/test6', (req, res, next) => {
     console.log(req);
     console.log('REQUEST BODY: ', req.body);
     selectedColeagueResponse = req.body;
 
-    mockedResponse1 = {
+    // replace the hardcoded token with variable authorizationToken
+    decodedToken = jwtDecode(authorizationToken);
+    decodedEmailToSearchFor = decodedToken.sub;
 
-    };
-    res.set('Content-Type', 'application/json')
-    res.send(mockedResponse1);
+  //  Array to search for emails
+
+
+    // function to search for idam id by email
+    function searchIdamIdByEmail(emailKey, myArray){
+        for (var i=0; i < myArray.length; i++) {
+            if (myArray[i].email === emailKey) {
+                return myArray[i].userIdentifier;
+            }
+        }
+    }
+
+    idOfUserWhoGrantsAccess =  searchIdamIdByEmail(decodedEmailToSearchFor, ccdResponsePost1);
+
+
+    idOfUserWhoIsGrantedAccess = req.body.case_details.case_data.OrgListOfUsers.value.code;
+    caseTypeId = req.body.case_details.case_type_id;
+    caseJurisdictionId = req.body.case_details.jurisdiction;
+    caseIDCcd = req.body.case_details.id;
+
+    urlTestVars =  `http://ccd-data-store-api-demo.service.core-compute-demo.internal/caseworkers/${idOfUserWhoGrantsAccess}/jurisdictions/${caseJurisdictionId}/case-types/${caseTypeId}/cases/${caseIDCcd}/users`
+
+    axios({
+        method: 'post',
+        url: urlTestVars,
+        headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken },
+        data: { }
+    })
+
+    res.send('');
 });
+
+
+
+
 
 app.get('/test7', (req, res, next) => {
     res.send(selectedColeagueResponse);
@@ -251,4 +296,8 @@ app.get('/test10', (req, res, next) => {
 
 app.get('/test11', (req, res, next) => {
     res.send(authorizationToken);
+});
+
+app.get('/test12', (req, res, next) => {
+    res.send(idOfUserWhoGrantsAccess);
 });
