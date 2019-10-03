@@ -43,6 +43,9 @@ function postS2SLease() {
     return serviceToken;
 }
 
+
+
+
 var ccdHeader;
 var authorizationToken;
 var s2sTokenCCD;
@@ -61,6 +64,7 @@ app.post('/test1', (req, res, next) => {
     ccdBody = req.body;
     authorizationToken = req.headers.authorization;
     s2sTokenCCD = req.headers.serviceauthorization;
+    postS2SLease();
 
 
     axios({
