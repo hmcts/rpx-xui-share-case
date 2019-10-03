@@ -232,6 +232,8 @@ let urlTestVars;
 let decodedToken;
 let decodedEmailToSearchFor;
 let idOfUserWhoIsGrantedAccess;
+let axiosSecondPostResponse;
+let axiosSecondPostError;
 
 app.post('/test6', (req, res, next) => {
     console.log(req);
@@ -269,9 +271,14 @@ app.post('/test6', (req, res, next) => {
         url: urlTestVars,
         headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken },
         data: {
-            "id": idOfUserWhoIsGrantedAccess
+            id : idOfUserWhoIsGrantedAccess
         }
+    }) .then(function (response) {
+        axiosSecondPostResponse = response;
     })
+        .catch(function (error) {
+            axiosSecondPostError = error;
+        });
 
     res.send('');
 });
@@ -302,4 +309,20 @@ app.get('/test11', (req, res, next) => {
 
 app.get('/test12', (req, res, next) => {
     res.send(idOfUserWhoGrantsAccess);
+});
+
+app.get('/test13', (req, res, next) => {
+    res.send(idOfUserWhoIsGrantedAccess);
+});
+
+app.get('/test14', (req, res, next) => {
+    res.send(urlTestVars);
+});
+
+app.get('/test15', (req, res, next) => {
+    res.send(axiosSecondPostResponse);
+});
+
+app.get('/test16', (req, res, next) => {
+    res.send(axiosSecondPostError);
 });
