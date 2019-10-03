@@ -40,7 +40,6 @@ function postS2SLease() {
         .catch(function (error) {
             serviceTokenError = error;
         });
-    return serviceToken;
 }
 
 
