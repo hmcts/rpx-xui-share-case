@@ -25,23 +25,23 @@ let serviceToken;
 
 let serviceTokenError;
 
-function postS2SLease() {
-    let response;
-    const oneTimePassword = otp({secret: s2sSecret}).totp();
+let generatedTokenresponse;
 
-    response = axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
-        microservice: 'xui_webapp',
-        oneTimePassword: oneTimePassword
-    })
-        .then(function (response) {
-            serviceToken = response.data;
-            console.log(serviceToken);
-        })
-        .catch(function (error) {
-            serviceTokenError = error;
-        });
-    return serviceToken;
-}
+function postS2SLease() {
+    return new Promise(resolve => {
+            const oneTimePassword = otp({secret: s2sSecret}).totp();
+            axios.post('http://rpe-service-auth-provider-demo.service.core-compute-demo.internal/lease', {
+                  microservice: 'xui_webapp',
+                  oneTimePassword: oneTimePassword
+            }).then(function(response) {
+                  serviceToken = response.data;
+              });
+            resolve()
+    });
+};
+
+
+
 
 var ccdHeader;
 var authorizationToken;
@@ -55,75 +55,84 @@ var responseFromPRD;
 var responseFromPRDError;
 
 app.post('/test1', (req, res, next) => {
-    console.log(req);
-    console.log('REQUEST BODY: ', req.body);
+   // console.log(req);
+   // console.log('REQUEST BODY: ', req.body);
     ccdHeader = req.headers;
     ccdBody = req.body;
     authorizationToken = req.headers.authorization;
     s2sTokenCCD = req.headers.serviceauthorization;
 
-    axios({
-        method: 'get',
-        url: 'http://rd-professional-api-demo.service.core-compute-demo.internal/refdata/external/v1/organisations/users',
-        headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken },
-    })
-        .then(function(response) {
-          responseFromPRD = response;
-          rawresponseRD = response.data.users;
+    postS2SLease().then( () =>
 
-            var idamStatus = "idamStatus";
-            // search for ACTIVE only
-            function searchActive(nameKey, myArray){
-              var  myUpdatedArray = [];
-                for (var i=0; i < myArray.length; i++) {
-                    if (myArray[i].idamStatus === nameKey) {
-                        myUpdatedArray.push(myArray[i]);
+        axios({
+
+            method: 'get',
+            url: 'http://rd-professional-api-demo.service.core-compute-demo.internal/refdata/external/v1/organisations/users',
+            headers: {'ServiceAuthorization': serviceToken, 'Authorization': authorizationToken },
+        })
+            .then(function(response) {
+                console.log('New Boris s2S token',serviceToken);
+                responseFromPRD = response;
+                rawresponseRD = response.data.users;
+                var idamStatus = "idamStatus";
+                // search for ACTIVE only
+                function searchActive(nameKey, myArray){
+                    var  myUpdatedArray = [];
+                    for (var i=0; i < myArray.length; i++) {
+                        if (myArray[i].idamStatus === nameKey) {
+                            myUpdatedArray.push(myArray[i]);
+                        }
                     }
+                    return myUpdatedArray;
                 }
-                return myUpdatedArray;
-            }
 
-            ccdResponsePost1 =  searchActive("ACTIVE", rawresponseRD);
+                ccdResponsePost1 =  searchActive("ACTIVE", rawresponseRD);
 
-            // create an array with desired values
-            function createListItemsArray(myArray){
-                var  listItemsArray = [];
-                var userIdentifier = "userIdentifier";
-                var firstName = "firstName";
-                for (var i=0; i < myArray.length; i++) {
+                // create an array with desired values
+                function createListItemsArray(myArray){
+                    var  listItemsArray = [];
+                    var userIdentifier = "userIdentifier";
+                    var firstName = "firstName";
+                    for (var i=0; i < myArray.length; i++) {
 
                         listItemsArray.push(   {
                             "code": myArray[i].userIdentifier,
                             "label": myArray[i].firstName + ' ' + myArray[i].lastName
                         }    );
 
-                }
-                return listItemsArray;
-            }
-
-
-
-
-            listItemsArrayToSend = createListItemsArray(ccdResponsePost1);
-
-
-            responseToSendOnFirstPost = {
-
-                "data": {
-                    "OrgListOfUsers": {
-                        "value": listItemsArrayToSend[0],
-                        "list_items": listItemsArrayToSend
                     }
+                    return listItemsArray;
                 }
 
-            };
 
 
-            res.set('Content-Type', 'application/json');
-            res.send(responseToSendOnFirstPost);
-        }) .catch(function (error) {
-        responseFromPRDError = error;
-    });
+
+                listItemsArrayToSend = createListItemsArray(ccdResponsePost1);
+
+
+                responseToSendOnFirstPost = {
+
+                    "data": {
+                        "OrgListOfUsers": {
+                            "value": listItemsArrayToSend[0],
+                            "list_items": listItemsArrayToSend
+                        }
+                    }
+
+                };
+
+
+                res.set('Content-Type', 'application/json');
+                res.send(responseToSendOnFirstPost);
+            }) .catch(function (error) {
+            responseFromPRDError = error;
+
+
+        })
+    );
+
+
+
 
 
 
@@ -209,16 +218,6 @@ app.get('/incomingToken', (req, res, next) => {
 
 
 
-app.get('/test4', (req, res, next) => {
-    postS2SLease();
-    console.log('BORIS TOKEN: ', serviceToken);
-    res.send(serviceToken);
-});
-
-app.get('/test5', (req, res, next) => {
-    postS2SLease();
-    res.send(serviceTokenError);
-});
 
 
 // Callback to catch the selected user and pass it to ccd
